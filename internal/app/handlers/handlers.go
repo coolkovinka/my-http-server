@@ -20,33 +20,36 @@ func NewHandlers(storage Storage) *Handlers {
 	}
 }
 
-func (s *Handlers) GetOriginalURL(response http.ResponseWriter, request *http.Request) {
-	if request.Method != http.MethodGet {
-		http.Error(response, "wrong request type", http.StatusBadRequest)
-		return
-	}
-
-	http.Redirect(response, request, "https://practicum.yandex.ru/", http.StatusTemporaryRedirect)
-
-}
-
-func (s *Handlers) SetShortURL(response http.ResponseWriter, request *http.Request) {
+func (h *Handlers) SetShortURL(response http.ResponseWriter, request *http.Request) {
 	if request.Method != http.MethodPost {
 		http.Error(response, "wrong request type", http.StatusBadRequest)
 		return
 	}
 
-	_, err := io.ReadAll(request.Body)
+	originalURL, err := io.ReadAll(request.Body)
 	if err != nil {
 		http.Error(response, "invalid request body", http.StatusBadRequest)
 		return
 	}
 
-	response.WriteHeader(http.StatusCreated)
+	shortURL := h.storage.SetByOriginalURL(string(originalURL))
 
-	_, err = response.Write([]byte("http://localhost:8080/EwHXdJfB"))
+	response.WriteHeader(http.StatusCreated)
+	_, err = response.Write([]byte(shortURL))
 	if err != nil {
 		http.Error(response, "failed writing response body", http.StatusInternalServerError)
 		return
 	}
+}
+
+func (h *Handlers) GetOriginalURL(response http.ResponseWriter, request *http.Request) {
+	if request.Method != http.MethodGet {
+		http.Error(response, "wrong request type", http.StatusBadRequest)
+		return
+	}
+
+	originalURL := h.storage.GetByURLPath(request.URL.Path)
+
+	http.Redirect(response, request, originalURL, http.StatusTemporaryRedirect)
+
 }
