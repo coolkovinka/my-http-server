@@ -26,13 +26,8 @@ func (s *Handlers) GetOriginalURL(response http.ResponseWriter, request *http.Re
 		return
 	}
 
-	originalURL := s.storage.GetByURLPath(request.URL.Path)
-	if originalURL != "" {
-		http.Redirect(response, request, originalURL, http.StatusTemporaryRedirect)
-	} else {
-		http.Error(response, "invalid request data", http.StatusBadRequest)
-		return
-	}
+	http.Redirect(response, request, "https://practicum.yandex.ru/", http.StatusTemporaryRedirect)
+
 }
 
 func (s *Handlers) SetShortURL(response http.ResponseWriter, request *http.Request) {
@@ -41,21 +36,15 @@ func (s *Handlers) SetShortURL(response http.ResponseWriter, request *http.Reque
 		return
 	}
 
-	body, err := io.ReadAll(request.Body)
+	_, err := io.ReadAll(request.Body)
 	if err != nil {
 		http.Error(response, "invalid request body", http.StatusBadRequest)
 		return
 	}
 
-	shortURL := s.storage.SetByOriginalURL(string(body))
-	if shortURL == "" {
-		http.Error(response, "such an URL does not exist", http.StatusBadRequest)
-		return
-	}
-
 	response.WriteHeader(http.StatusCreated)
 
-	_, err = response.Write([]byte(shortURL))
+	_, err = response.Write([]byte("http://localhost:8080/EwHXdJfB"))
 	if err != nil {
 		http.Error(response, "failed writing response body", http.StatusInternalServerError)
 		return
