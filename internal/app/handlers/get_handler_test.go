@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 
 	"my-http-server/internal/pkg/storage"
 )
@@ -61,6 +62,9 @@ func TestHandlers_GetOriginalURL(t *testing.T) {
 			handler.GetOriginalURL(w, request)
 
 			res := w.Result()
+			err := res.Body.Close()
+			require.NoError(t, err)
+
 			assert.Equal(t, test.want.code, res.StatusCode)
 		})
 	}
