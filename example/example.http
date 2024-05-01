@@ -5,7 +5,7 @@ Host: localhost:8080
 Content-Type: text/plain; charset=utf-8
 User-Agent: go-resty/2.7.0
 
-https://practicum.yandex.ru/
+https://go.dev/
 
 
 ###
