@@ -2,6 +2,8 @@ package server
 
 import (
 	"net/http"
+
+	"my-http-server/internal/pkg/config"
 )
 
 type Handlers interface {
@@ -12,12 +14,14 @@ type Handlers interface {
 // Server represents the server to act.
 type Server struct {
 	handlers Handlers
+	cfg      *config.Config
 }
 
 // NewServer creates a new server .
-func NewServer(handlers Handlers) *Server {
+func NewServer(handlers Handlers, cfg *config.Config) *Server {
 	return &Server{
 		handlers: handlers,
+		cfg:      cfg,
 	}
 }
 
@@ -28,5 +32,5 @@ func (s *Server) Start() error {
 	mux.HandleFunc(`/`, s.handlers.SetShortURL)
 	mux.HandleFunc(`/{id}`, s.handlers.GetOriginalURL)
 
-	return http.ListenAndServe(`localhost:8080`, mux)
+	return http.ListenAndServe(s.cfg.Host+`:`+s.cfg.Port, mux)
 }

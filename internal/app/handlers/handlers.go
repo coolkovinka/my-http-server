@@ -5,11 +5,6 @@ import (
 	"net/http"
 )
 
-const (
-// shortURL    = `http://localhost:8080/EwHXdJfB`
-// originalURL = `https://practicum.yandex.ru/`
-)
-
 type Storage interface {
 	GetByURLPath(string) string
 	SetByOriginalURL(string) string

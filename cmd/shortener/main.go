@@ -22,7 +22,7 @@ func main() {
 
 	serviceHandlers := handlers.NewHandlers(repo)
 
-	newServer := server.NewServer(serviceHandlers)
+	newServer := server.NewServer(serviceHandlers, cfg)
 	err = newServer.Start()
 	if err != nil {
 		panic(err)
