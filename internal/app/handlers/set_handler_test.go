@@ -3,6 +3,7 @@ package handlers
 import (
 	"bytes"
 	"io"
+
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -10,6 +11,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
+	"my-http-server/config"
 	"my-http-server/internal/pkg/storage"
 )
 
@@ -22,7 +24,7 @@ func TestHandlers_SetShortURL(t *testing.T) {
 	}
 
 	repo := storage.NewStorage()
-	handler := NewHandlers(repo)
+	handler := NewHandlers(&config.Config{}, repo)
 
 	tests := []struct {
 		name string

@@ -40,7 +40,7 @@ func (s *Storage) SetByOriginalURL(originalURL string) string {
 	shortURL := `/` + generateRandomString()
 	s.repo[originalURL] = shortURL
 
-	return "http://localhost:8080" + shortURL
+	return shortURL
 }
 
 func generateRandomString() string {

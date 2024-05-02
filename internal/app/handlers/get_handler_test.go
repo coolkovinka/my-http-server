@@ -8,6 +8,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
+	"my-http-server/config"
 	"my-http-server/internal/pkg/storage"
 )
 
@@ -18,10 +19,16 @@ func TestHandlers_GetOriginalURL(t *testing.T) {
 		method string
 	}
 
+	cfg := config.Config{
+		ServerAddress: "localhost:8080",
+		ServerBaseURL: "http://localhost:8080",
+	}
+
 	originalURL := "https://go.dev/"
+
 	repo := storage.NewStorage()
 	shortURL := repo.SetByOriginalURL(originalURL)
-	handler := NewHandlers(repo)
+	handler := NewHandlers(&cfg, repo)
 
 	tests := []struct {
 		name string

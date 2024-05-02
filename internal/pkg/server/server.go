@@ -1,11 +1,12 @@
 package server
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
 
-	"my-http-server/internal/pkg/config"
+	"my-http-server/config"
 )
 
 type Handlers interface {
@@ -34,5 +35,7 @@ func (s *Server) Start() error {
 	router.Get(`/{id}`, s.handlers.GetOriginalURL)
 	router.Post(`/`, s.handlers.SetShortURL)
 
-	return http.ListenAndServe(s.cfg.Host+`:`+s.cfg.Port, router)
+	fmt.Println("Running server on", s.cfg.ServerAddress)
+
+	return http.ListenAndServe(s.cfg.ServerAddress, router)
 }

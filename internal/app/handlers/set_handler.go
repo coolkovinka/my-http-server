@@ -25,7 +25,7 @@ func (h *Handlers) SetShortURL(response http.ResponseWriter, request *http.Reque
 	shortURL := h.storage.SetByOriginalURL(string(originalURL))
 
 	response.WriteHeader(http.StatusCreated)
-	_, err = response.Write([]byte(shortURL))
+	_, err = response.Write([]byte(h.cfg.ServerBaseURL + shortURL))
 	if err != nil {
 		http.Error(response, "failed writing response body", http.StatusInternalServerError)
 		return
