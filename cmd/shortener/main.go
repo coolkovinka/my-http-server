@@ -18,10 +18,13 @@ func main() {
 	}
 	fmt.Printf("[config]: %+v\n", strConfig)
 
+	// storage
 	repo := storage.NewStorage()
 
+	// handlers
 	serviceHandlers := handlers.NewHandlers(repo)
 
+	// server
 	newServer := server.NewServer(serviceHandlers, cfg)
 	err = newServer.Start()
 	if err != nil {

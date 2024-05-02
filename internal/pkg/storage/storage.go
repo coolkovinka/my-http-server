@@ -45,7 +45,7 @@ func (s *Storage) SetByOriginalURL(originalURL string) string {
 
 func generateRandomString() string {
 	length := 8
-	const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+	const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 	seed := rand.NewSource(time.Now().UnixNano())
 	random := rand.New(seed)
 

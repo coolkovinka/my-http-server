@@ -3,6 +3,8 @@ package server
 import (
 	"net/http"
 
+	"github.com/go-chi/chi/v5"
+
 	"my-http-server/internal/pkg/config"
 )
 
@@ -27,10 +29,10 @@ func NewServer(handlers Handlers, cfg *config.Config) *Server {
 
 // Start starts the server
 func (s *Server) Start() error {
-	mux := http.NewServeMux()
+	router := chi.NewRouter()
 
-	mux.HandleFunc(`/`, s.handlers.SetShortURL)
-	mux.HandleFunc(`/{id}`, s.handlers.GetOriginalURL)
+	router.Get(`/{id}`, s.handlers.GetOriginalURL)
+	router.Post(`/`, s.handlers.SetShortURL)
 
-	return http.ListenAndServe(s.cfg.Host+`:`+s.cfg.Port, mux)
+	return http.ListenAndServe(s.cfg.Host+`:`+s.cfg.Port, router)
 }
