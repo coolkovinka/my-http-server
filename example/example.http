@@ -1,0 +1,16 @@
+
+###
+POST / HTTP/1.1
+Host: localhost:8080
+Content-Type: text/plain; charset=utf-8
+User-Agent: go-resty/2.7.0
+
+https://go.dev/
+
+
+###
+GET /EwHXdJfB HTTP/1.1
+Host: localhost:8080
+User-Agent: go-resty/2.7.0
+
+
