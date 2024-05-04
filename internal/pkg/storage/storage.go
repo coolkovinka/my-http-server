@@ -53,5 +53,6 @@ func generateRandomString() string {
 	for i := range result {
 		result[i] = charset[random.Intn(len(charset))]
 	}
+
 	return string(result)
 }

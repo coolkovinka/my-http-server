@@ -1,8 +1,8 @@
 package main
 
 import (
-	"fmt"
-	
+	"log"
+
 	"my-http-server/config"
 	"my-http-server/internal/app/handlers"
 	"my-http-server/internal/pkg/server"
@@ -12,9 +12,6 @@ import (
 func main() {
 	// app config
 	cfg := config.NewConfig()
-
-	strConfig, _ := cfg.Sprint()
-	fmt.Printf("[config]: %+v\n", strConfig)
 
 	// storage
 	repo := storage.NewStorage()
@@ -27,7 +24,6 @@ func main() {
 
 	err := newServer.Start()
 	if err != nil {
-		panic(err)
+		log.Fatalf("fail staring server %v", err)
 	}
-
 }

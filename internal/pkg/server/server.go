@@ -1,7 +1,8 @@
 package server
 
 import (
-	"fmt"
+	"errors"
+	"log"
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
@@ -28,14 +29,21 @@ func NewServer(handlers Handlers, cfg *config.Config) *Server {
 	}
 }
 
-// Start starts the server
+// Start starts the server.
 func (s *Server) Start() error {
 	router := chi.NewRouter()
 
 	router.Get(`/{id}`, s.handlers.GetOriginalURL)
 	router.Post(`/`, s.handlers.SetShortURL)
 
-	fmt.Println("Running server on", s.cfg.ServerAddress)
+	log.Printf("Running server on %s", s.cfg.ServerAddress)
 
-	return http.ListenAndServe(s.cfg.ServerAddress, router)
+	err := http.ListenAndServe(s.cfg.ServerAddress, router)
+	if err != nil {
+		if !errors.Is(err, http.ErrServerClosed) {
+			return errors.New(err.Error())
+		}
+	}
+
+	return nil
 }

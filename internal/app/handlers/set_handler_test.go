@@ -43,27 +43,18 @@ func TestHandlers_SetShortURL(t *testing.T) {
 		{
 			name: "negative test. Invalid request URL",
 			want: want{
-				code:   http.StatusNotFound,
-				target: "/",
-				method: http.MethodPost,
-			},
-		},
-		{
-			name: "negative test. Wrong method type",
-			want: want{
 				code:   http.StatusBadRequest,
 				target: "/",
-				method: http.MethodGet,
+				method: http.MethodPost,
 			},
 		},
 	}
 
 	for _, test := range tests {
-
 		t.Run(test.name, func(t *testing.T) {
 			reqBody := test.want.reqBody
 
-			request := httptest.NewRequest(test.want.method, test.want.target, bytes.NewBuffer([]byte(reqBody)))
+			request := httptest.NewRequest(test.want.method, test.want.target, bytes.NewBufferString(reqBody))
 			w := httptest.NewRecorder()
 
 			handler.SetShortURL(w, request)

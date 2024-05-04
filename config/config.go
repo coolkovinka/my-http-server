@@ -1,61 +1,69 @@
 package config
 
 import (
-	"encoding/json"
 	"flag"
-	"fmt"
+	"log"
 
 	"github.com/kelseyhightower/envconfig"
 )
 
 const (
 	defaultServerAddress = "localhost:8080"
-	defaultBaseUrl       = "http://localhost:8080"
+	defaultBaseURL       = "http://localhost:8080"
 )
 
 type Config struct {
 	ServerAddress string `envconfig:"SERVER_ADDRESS" default:""`
-	BaseUrl       string `envconfig:"BASE_URL" default:""`
+	BaseURL       string `envconfig:"BASE_URL" default:""`
 }
 
-// NewConfig returns app config
+// NewConfig returns app config.
 func NewConfig() *Config {
 	cfg := new(Config)
 
 	err := envconfig.Process("", cfg)
 	if err != nil {
-		fmt.Printf("error processing env config %v", err)
+		log.Printf("error processing env config %v", err)
 	}
 
-	if cfg.ServerAddress == "" || cfg.BaseUrl == "" {
-		cfg.parseFlags()
+	cfg.parseFlag()
+
+	if cfg.ServerAddress == "" {
+		cfg.setDefaultServerAddress()
 	}
 
-	if cfg.ServerAddress == "" || cfg.BaseUrl == "" {
-		fmt.Print("default env config is set \n")
-		cfg.setDefault()
+	if cfg.BaseURL == "" {
+		cfg.setDefaultBaseURL()
 	}
 
 	return cfg
 }
 
-func (c *Config) parseFlags() {
-	flag.StringVar(&c.ServerAddress, "a", "", "address and port to run server")
-	flag.StringVar(&c.BaseUrl, "b", "", "base URL with short URL")
+func (c *Config) parseFlag() {
+	var serverAddress string
+	var baseURL string
+
+	flag.StringVar(&serverAddress, "a", "localhost:8080", "host and port to run server")
+	flag.StringVar(&baseURL, "b", "http://localhost:8080", "base URL with short URL")
 
 	flag.Parse()
-}
 
-func (c *Config) Sprint() (string, error) {
-	b, err := json.Marshal(c)
-	if err != nil {
-		return "", err
+	if len(c.ServerAddress) == 0 {
+		c.ServerAddress = serverAddress
 	}
-
-	return string(b), nil
+	if len(c.BaseURL) == 0 {
+		c.BaseURL = baseURL
+	}
 }
 
-func (c *Config) setDefault() {
+func (c *Config) setDefaultServerAddress() {
+	log.Print("default server address is set")
+
 	c.ServerAddress = defaultServerAddress
-	c.BaseUrl = defaultBaseUrl
+}
+
+func (c *Config) setDefaultBaseURL() {
+	log.Print("default base URL is set")
+
+	c.BaseURL = defaultBaseURL
 }

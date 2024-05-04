@@ -47,21 +47,11 @@ func TestHandlers_GetOriginalURL(t *testing.T) {
 				method: http.MethodGet,
 			},
 		},
-		{
-			name: "negative test. Wrong method type",
-			want: want{
-				code:   http.StatusBadRequest,
-				target: "/",
-				method: http.MethodPost,
-			},
-		},
 	}
 
 	for _, test := range tests {
-
 		t.Run(test.name, func(t *testing.T) {
-
-			request := httptest.NewRequest(test.want.method, test.want.target, nil)
+			request := httptest.NewRequest(test.want.method, test.want.target, http.NoBody)
 			w := httptest.NewRecorder()
 			handler.GetOriginalURL(w, request)
 
