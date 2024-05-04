@@ -3,11 +3,47 @@ package config
 import (
 	"encoding/json"
 	"flag"
+	"fmt"
+
+	"github.com/kelseyhightower/envconfig"
+)
+
+const (
+	defaultServerAddress = "localhost:8080"
+	defaultBaseUrl       = "http://localhost:8080"
 )
 
 type Config struct {
-	ServerAddress string
-	ServerBaseURL string
+	ServerAddress string `envconfig:"SERVER_ADDRESS" default:""`
+	BaseUrl       string `envconfig:"BASE_URL" default:""`
+}
+
+// NewConfig returns app config
+func NewConfig() *Config {
+	cfg := new(Config)
+
+	err := envconfig.Process("", cfg)
+	if err != nil {
+		fmt.Printf("error processing env config %v", err)
+	}
+
+	if cfg.ServerAddress == "" || cfg.BaseUrl == "" {
+		cfg.parseFlags()
+	}
+
+	if cfg.ServerAddress == "" || cfg.BaseUrl == "" {
+		fmt.Print("default env config is set \n")
+		cfg.setDefault()
+	}
+
+	return cfg
+}
+
+func (c *Config) parseFlags() {
+	flag.StringVar(&c.ServerAddress, "a", "", "address and port to run server")
+	flag.StringVar(&c.BaseUrl, "b", "", "base URL with short URL")
+
+	flag.Parse()
 }
 
 func (c *Config) Sprint() (string, error) {
@@ -19,14 +55,7 @@ func (c *Config) Sprint() (string, error) {
 	return string(b), nil
 }
 
-// NewConfig returns app config
-func NewConfig() *Config {
-	cfg := Config{}
-
-	flag.StringVar(&cfg.ServerAddress, "a", "localhost:8080", "address and port to run server")
-	flag.StringVar(&cfg.ServerBaseURL, "b", "http://localhost:8080", "base URL with short URL")
-
-	flag.Parse()
-
-	return &cfg
+func (c *Config) setDefault() {
+	c.ServerAddress = defaultServerAddress
+	c.BaseUrl = defaultBaseUrl
 }

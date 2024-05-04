@@ -19,16 +19,13 @@ func TestHandlers_GetOriginalURL(t *testing.T) {
 		method string
 	}
 
-	cfg := config.Config{
-		ServerAddress: "localhost:8080",
-		ServerBaseURL: "http://localhost:8080",
-	}
+	cfg := config.NewConfig()
 
 	originalURL := "https://go.dev/"
 
 	repo := storage.NewStorage()
 	shortURL := repo.SetByOriginalURL(originalURL)
-	handler := NewHandlers(&cfg, repo)
+	handler := NewHandlers(cfg, repo)
 
 	tests := []struct {
 		name string

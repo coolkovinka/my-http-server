@@ -23,8 +23,9 @@ func TestHandlers_SetShortURL(t *testing.T) {
 		reqBody string
 	}
 
+	cfg := &config.Config{}
 	repo := storage.NewStorage()
-	handler := NewHandlers(&config.Config{}, repo)
+	handler := NewHandlers(cfg, repo)
 
 	tests := []struct {
 		name string
