@@ -8,7 +8,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"my-http-server/config"
+	"my-http-server/internal/config"
 	"my-http-server/internal/pkg/storage"
 )
 
@@ -35,7 +35,7 @@ func TestHandlers_GetOriginalURL(t *testing.T) {
 			name: "positive test. Valid request short URL",
 			want: want{
 				code:   http.StatusTemporaryRedirect,
-				target: shortURL,
+				target: `/` + shortURL,
 				method: http.MethodGet,
 			},
 		},

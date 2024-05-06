@@ -3,8 +3,8 @@ package main
 import (
 	"log"
 
-	"my-http-server/config"
 	"my-http-server/internal/app/handlers"
+	"my-http-server/internal/config"
 	"my-http-server/internal/pkg/server"
 	"my-http-server/internal/pkg/storage"
 )

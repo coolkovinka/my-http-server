@@ -23,7 +23,12 @@ func (h *Handlers) SetShortURL(response http.ResponseWriter, request *http.Reque
 	shortURL := h.storage.SetByOriginalURL(string(originalURL))
 
 	scheme := "http://"
-	baseURL, _ := url.JoinPath(scheme, h.cfg.ServerAddress, shortURL)
+	baseURL, err := url.JoinPath(scheme, h.cfg.ServerAddress, shortURL)
+	if err != nil {
+		log.Printf("error joining URL path %v", err)
+		http.Error(response, "something went wrong", http.StatusInternalServerError)
+		return
+	}
 
 	response.WriteHeader(http.StatusCreated)
 

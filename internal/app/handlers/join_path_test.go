@@ -9,7 +9,8 @@ import (
 )
 
 func TestJoinPath(t *testing.T) {
-	result, err := url.JoinPath("http://", "localhost:8080", "/hdfSDS")
+	shortURL := "hdfSDS"
+	result, err := url.JoinPath("http://", "localhost:8080", shortURL)
 
 	require.NoError(t, err)
 	assert.Equal(t, "http://localhost:8080/hdfSDS", result)

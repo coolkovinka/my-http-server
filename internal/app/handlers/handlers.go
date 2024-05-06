@@ -1,6 +1,8 @@
 package handlers
 
-import "my-http-server/config"
+import (
+	"my-http-server/internal/config"
+)
 
 type Storage interface {
 	GetByURLPath(string) string

@@ -7,7 +7,7 @@ import (
 
 	"github.com/go-chi/chi/v5"
 
-	"my-http-server/config"
+	"my-http-server/internal/config"
 )
 
 type Handlers interface {

@@ -1,11 +1,14 @@
 package storage
 
 import (
+	"math/rand"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 )
 
 func TestGenerateRandomString(t *testing.T) {
-	assert.Len(t, generateRandomString(), 8)
+	randStrLen := rand.Intn(20)
+
+	assert.Len(t, generateRandomString(randStrLen), randStrLen)
 }
